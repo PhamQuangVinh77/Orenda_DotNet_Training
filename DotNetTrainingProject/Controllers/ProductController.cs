@@ -31,22 +31,34 @@ namespace DotNetTrainingProject.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProduct([FromBody] ProductDTO p)
         {
-            await _service.AddProduct(p);
-            return Ok("Thêm thành công!");
+            var response = await _service.AddProduct(p);
+            if (response)
+            {
+                return Ok("Add product successfully!");
+            }
+            return NotFound("Add product failed!");
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct([FromBody] ProductDTO p)
         {
-            await _service.UpdateProduct(p);
-            return Ok("Update thành công!");
+            var response = await _service.UpdateProduct(p);
+            if (response)
+            {
+                return Ok("Update product successfully!");
+            }
+            return NotFound("Update product failed!");
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct([FromForm] int id)
         {
-            await _service.DeleteProduct(id);
-            return Ok("Xoá thành công!");
+            var response = await _service.DeleteProduct(id);
+            if (response)
+            {
+                return Ok("Delete product successfully!");
+            }
+            return NotFound("Delete product failed!");
         }
     }
 }

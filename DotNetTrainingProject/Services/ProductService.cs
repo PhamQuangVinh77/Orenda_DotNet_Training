@@ -45,50 +45,53 @@ namespace DotNetTrainingProject.Services
             }
         }
 
-        public async Task AddProduct([FromBody] ProductDTO p)
+        public async Task<bool> AddProduct([FromBody] ProductDTO p)
         {
             try
             {
                 p.Id = 0;
                 var response = _mapper.Map<Product>(p);
-                _dbContext.Products.Add(response);
+                await _dbContext.Products.AddAsync(response);
                 await _dbContext.SaveChangesAsync();
+                return true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                throw;
+                return false;
             }
         }
 
-        public async Task UpdateProduct([FromBody] ProductDTO p)
+        public async Task<bool> UpdateProduct([FromBody] ProductDTO p)
         {
             try
             {
                 var response = _mapper.Map<Product>(p);
                 _dbContext.Products.Update(response);
                 await _dbContext.SaveChangesAsync();
+                return true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                throw;
+                return false;
             }
         }
 
-        public async Task DeleteProduct([FromForm] int id)
+        public async Task<bool> DeleteProduct([FromForm] int id)
         {
             try
             {
                 var response = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
-                if(response == null)return;
+                if(response == null) return false;
                 _dbContext.Products.Remove(response);
                 await _dbContext.SaveChangesAsync();
+                return true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                throw;
+                return false;
             }
         }
     }
