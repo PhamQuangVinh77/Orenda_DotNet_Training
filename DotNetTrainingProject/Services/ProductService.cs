@@ -1,22 +1,26 @@
 ﻿using AutoMapper;
-using DotNetTrainingProject.DbContexts;
 using DotNetTrainingProject.Entities;
+using DotNetTrainingProject.Repositories.IRepositories;
 using DotNetTrainingProject.Services.IServices;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using DotNetTrainingProject.UnitOfWorks.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DotNetTrainingProject.Services
 {
     public class ProductService : IProductService
     {
         private readonly IMapper _mapper;
-        private MyTestDbContext _dbContext;
+        private IUnitOfWork _unitOfWork;
+        private IProductRepository _productRepository;
+        private IProductGroupRepository _productGroupRepository;
         private ILogger<ProductService> _logger;
 
-        public ProductService(IMapper mapper, MyTestDbContext dbContext, ILogger<ProductService> logger)
+        public ProductService(IMapper mapper, IUnitOfWork unitOfWork, ILogger<ProductService> logger)
         {
             _mapper = mapper;
-            _dbContext = dbContext;
+            _unitOfWork = unitOfWork;
+            _productRepository = _unitOfWork.ProductRepository;
+            _productGroupRepository = _unitOfWork.ProductGroupRepository;
             _logger = logger;
         }
 
@@ -24,19 +28,7 @@ namespace DotNetTrainingProject.Services
         {
             try
             {
-                return await _dbContext.Products.ToListAsync();
-            }
-            catch (Exception ex) {
-                _logger.LogError(ex.Message);
-                throw;
-            }
-        }
-
-        public async Task<Product> GetProductById([FromForm] int id)
-        {
-            try
-            {
-                return await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
+                return await _productRepository.GetAll();
             }
             catch (Exception ex)
             {
@@ -45,14 +37,27 @@ namespace DotNetTrainingProject.Services
             }
         }
 
-        public async Task<bool> AddProduct([FromBody] ProductDTO p)
+        public async Task<Product> GetProductById(int id)
+        {
+            try
+            {
+                return await _productRepository.GetById(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<bool> AddProduct(ProductDTO p)
         {
             try
             {
                 p.Id = 0;
                 var response = _mapper.Map<Product>(p);
-                await _dbContext.Products.AddAsync(response);
-                await _dbContext.SaveChangesAsync();
+                await _productRepository.Add(response);
+                await _unitOfWork.Save();
                 return true;
             }
             catch (Exception ex)
@@ -62,13 +67,15 @@ namespace DotNetTrainingProject.Services
             }
         }
 
-        public async Task<bool> UpdateProduct([FromBody] ProductDTO p)
+        public async Task<bool> UpdateProduct(ProductDTO p) // ERROR
         {
             try
             {
+                var check = await _productRepository.GetById(p.Id);
+                if (check == null) return false;
                 var response = _mapper.Map<Product>(p);
-                _dbContext.Products.Update(response);
-                await _dbContext.SaveChangesAsync();
+                _productRepository.Update(response);
+                await _unitOfWork.Save();
                 return true;
             }
             catch (Exception ex)
@@ -78,14 +85,14 @@ namespace DotNetTrainingProject.Services
             }
         }
 
-        public async Task<bool> DeleteProduct([FromForm] int id)
+        public async Task<bool> DeleteProduct(int id)
         {
             try
             {
-                var response = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
-                if(response == null) return false;
-                _dbContext.Products.Remove(response);
-                await _dbContext.SaveChangesAsync();
+                var response = await _productRepository.GetById(id);
+                if (response == null) return false;
+                _productRepository.Delete(response);
+                await _unitOfWork.Save();
                 return true;
             }
             catch (Exception ex)
@@ -93,6 +100,38 @@ namespace DotNetTrainingProject.Services
                 _logger.LogError(ex.Message);
                 return false;
             }
+        }
+
+        public async Task<bool> AddProductWithNewGroup(ProductDTO p, ProductGroupDTO g)
+        {
+            using (IDbContextTransaction transaction = _unitOfWork.DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    // Add new group
+                    g.Id = 0;
+                    var groupResponse = _mapper.Map<ProductGroup>(g);
+                    await _productGroupRepository.Add(groupResponse);
+                    await _unitOfWork.Save();
+
+                    // Add new product
+                    var listGroup = await _productGroupRepository.GetAll();
+                    p.ProductGroupId = listGroup.Last().Id;
+                    p.Id = 0;
+                    var productResponse = _mapper.Map<Product>(p);
+                    await _productRepository.Add(productResponse);
+                    await _unitOfWork.Save();
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    _logger.LogError(ex.Message);
+
+                }
+            }
+            return false;
         }
     }
 }

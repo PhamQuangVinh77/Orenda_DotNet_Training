@@ -1,6 +1,8 @@
 using DotNetTrainingProject.DbContexts;
 using DotNetTrainingProject.Services;
 using DotNetTrainingProject.Services.IServices;
+using DotNetTrainingProject.UnitOfWorks.Interfaces;
+using DotNetTrainingProject.UnitOfWorks;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +15,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<IProductService, ProductService>();
 
 builder.Services.AddDbContext<MyTestDbContext>(option => option.UseMySQL(builder.Configuration.GetConnectionString("TestDb")));
 

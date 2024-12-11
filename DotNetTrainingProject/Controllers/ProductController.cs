@@ -1,4 +1,5 @@
 ﻿using DotNetTrainingProject.Entities;
+using DotNetTrainingProject.Requests;
 using DotNetTrainingProject.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -59,6 +60,17 @@ namespace DotNetTrainingProject.Controllers
                 return Ok("Delete product successfully!");
             }
             return NotFound("Delete product failed!");
+        }
+
+        [HttpPost("add-product-with-new-group")]
+        public async Task<IActionResult> AddProductWithNewGroup([FromBody] TestTransactionRequest request)
+        {
+            var response = await _service.AddProductWithNewGroup(request.Product, request.ProductGroup);
+            if (response)
+            {
+                return Ok("Add successfully!");
+            }
+            return NotFound("Add failed!");
         }
     }
 }
