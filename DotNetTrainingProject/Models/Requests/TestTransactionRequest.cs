@@ -1,6 +1,6 @@
 ﻿using DotNetTrainingProject.Entities;
 
-namespace DotNetTrainingProject.Requests
+namespace DotNetTrainingProject.Models.Requests
 {
     public class TestTransactionRequest
     {

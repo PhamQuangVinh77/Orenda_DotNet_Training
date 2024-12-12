@@ -3,6 +3,7 @@ using System;
 using DotNetTrainingProject.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotNetTrainingProject.Migrations
 {
     [DbContext(typeof(MyTestDbContext))]
-    partial class MyTestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241212102401_ver-08")]
+    partial class ver08
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,23 +109,22 @@ namespace DotNetTrainingProject.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3b39402a-e8ab-4838-8386-a90fb05dcfab",
+                            Id = "ab4f93a6-5f63-4595-bf9e-46e8d91b4c22",
                             AccessFailedCount = 0,
                             Address = "Hanoi",
-                            ConcurrencyStamp = "b99e5b3f-ae54-4701-b64c-b0c3fcbde494",
-                            CreatedAt = new DateTime(2024, 12, 12, 17, 39, 27, 912, DateTimeKind.Local).AddTicks(906),
-                            DateOfBirth = new DateTime(2024, 12, 12, 17, 39, 27, 912, DateTimeKind.Local).AddTicks(893),
+                            ConcurrencyStamp = "0dbfcabf-03b4-43a8-97c5-0a653bd70d4b",
+                            CreatedAt = new DateTime(2024, 12, 12, 17, 24, 1, 421, DateTimeKind.Local).AddTicks(889),
+                            DateOfBirth = new DateTime(2024, 12, 12, 17, 24, 1, 421, DateTimeKind.Local).AddTicks(877),
                             Description = "It's boss's account",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             FullName = "Boss Admin",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEDxDxHjYAJ3lS921Ja/nsJcgMVaf+1gKlDjU0QsfEySHVvDhyR72AigqLIbDA3kCdg==",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "ebb17f50-c430-4d8b-93a2-653888d58216",
+                            SecurityStamp = "cfdb3e73-e093-4cd0-ba58-e894a1b75da8",
                             TwoFactorEnabled = false,
-                            UpdatedAt = new DateTime(2024, 12, 12, 17, 39, 27, 912, DateTimeKind.Local).AddTicks(907),
+                            UpdatedAt = new DateTime(2024, 12, 12, 17, 24, 1, 421, DateTimeKind.Local).AddTicks(890),
                             UserName = "admin"
                         });
                 });
@@ -208,14 +210,14 @@ namespace DotNetTrainingProject.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5f92a7f1-777f-4362-bf6f-660c950745fa",
+                            Id = "17ecc1e0-ecc7-49a7-8827-2e6ae36041f0",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "a2a38735-5da3-44b1-9c5c-103fcad4d912",
+                            Id = "27a6f3e7-9c22-42a5-bd5f-458ebf71bd7f",
                             ConcurrencyStamp = "2",
                             Name = "Customer",
                             NormalizedName = "Customer"
@@ -307,8 +309,8 @@ namespace DotNetTrainingProject.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "3b39402a-e8ab-4838-8386-a90fb05dcfab",
-                            RoleId = "5f92a7f1-777f-4362-bf6f-660c950745fa"
+                            UserId = "ab4f93a6-5f63-4595-bf9e-46e8d91b4c22",
+                            RoleId = "17ecc1e0-ecc7-49a7-8827-2e6ae36041f0"
                         });
                 });
 

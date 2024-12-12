@@ -1,5 +1,5 @@
 ﻿using DotNetTrainingProject.Entities;
-using DotNetTrainingProject.Requests;
+using DotNetTrainingProject.Models.Requests;
 using DotNetTrainingProject.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 

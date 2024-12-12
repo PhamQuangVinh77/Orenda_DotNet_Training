@@ -3,6 +3,7 @@ using System;
 using DotNetTrainingProject.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotNetTrainingProject.Migrations
 {
     [DbContext(typeof(MyTestDbContext))]
-    partial class MyTestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241212035955_ver-02")]
+    partial class ver02
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,7 +31,8 @@ namespace DotNetTrainingProject.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .HasColumnType("varchar(255)");
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -41,7 +45,8 @@ namespace DotNetTrainingProject.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -51,7 +56,8 @@ namespace DotNetTrainingProject.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("FullName")
-                        .HasColumnType("varchar(255)");
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
@@ -77,7 +83,8 @@ namespace DotNetTrainingProject.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ProfilePictureUrl")
-                        .HasColumnType("varchar(255)");
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
@@ -102,29 +109,6 @@ namespace DotNetTrainingProject.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "3b39402a-e8ab-4838-8386-a90fb05dcfab",
-                            AccessFailedCount = 0,
-                            Address = "Hanoi",
-                            ConcurrencyStamp = "b99e5b3f-ae54-4701-b64c-b0c3fcbde494",
-                            CreatedAt = new DateTime(2024, 12, 12, 17, 39, 27, 912, DateTimeKind.Local).AddTicks(906),
-                            DateOfBirth = new DateTime(2024, 12, 12, 17, 39, 27, 912, DateTimeKind.Local).AddTicks(893),
-                            Description = "It's boss's account",
-                            Email = "admin@gmail.com",
-                            EmailConfirmed = false,
-                            FullName = "Boss Admin",
-                            LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEDxDxHjYAJ3lS921Ja/nsJcgMVaf+1gKlDjU0QsfEySHVvDhyR72AigqLIbDA3kCdg==",
-                            PhoneNumberConfirmed = false,
-                            ProfilePictureUrl = "",
-                            SecurityStamp = "ebb17f50-c430-4d8b-93a2-653888d58216",
-                            TwoFactorEnabled = false,
-                            UpdatedAt = new DateTime(2024, 12, 12, 17, 39, 27, 912, DateTimeKind.Local).AddTicks(907),
-                            UserName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("DotNetTrainingProject.Entities.Product", b =>
@@ -204,22 +188,6 @@ namespace DotNetTrainingProject.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "5f92a7f1-777f-4362-bf6f-660c950745fa",
-                            ConcurrencyStamp = "1",
-                            Name = "Admin",
-                            NormalizedName = "Admin"
-                        },
-                        new
-                        {
-                            Id = "a2a38735-5da3-44b1-9c5c-103fcad4d912",
-                            ConcurrencyStamp = "2",
-                            Name = "Customer",
-                            NormalizedName = "Customer"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -303,13 +271,6 @@ namespace DotNetTrainingProject.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "3b39402a-e8ab-4838-8386-a90fb05dcfab",
-                            RoleId = "5f92a7f1-777f-4362-bf6f-660c950745fa"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
