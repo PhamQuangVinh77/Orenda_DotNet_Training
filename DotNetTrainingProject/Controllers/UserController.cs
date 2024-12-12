@@ -35,7 +35,7 @@ namespace DotNetTrainingProject.Controllers
             {
                 return StatusCode(StatusCodes.Status401Unauthorized, new Response { Status = "Error", Message = "Login failed!" });
             }
-            return Ok(result);
+            return Ok("Access token:" + result);
         }
     }
 }
