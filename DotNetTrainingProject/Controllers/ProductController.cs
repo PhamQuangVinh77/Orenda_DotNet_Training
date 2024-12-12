@@ -1,6 +1,7 @@
 ﻿using DotNetTrainingProject.Entities;
 using DotNetTrainingProject.Models.Requests;
 using DotNetTrainingProject.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetTrainingProject.Controllers
@@ -30,6 +31,7 @@ namespace DotNetTrainingProject.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddProduct([FromBody] ProductDTO p)
         {
             var response = await _service.AddProduct(p);
@@ -41,6 +43,7 @@ namespace DotNetTrainingProject.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateProduct([FromBody] ProductDTO p)
         {
             var response = await _service.UpdateProduct(p);
@@ -52,6 +55,7 @@ namespace DotNetTrainingProject.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteProduct([FromForm] int id)
         {
             var response = await _service.DeleteProduct(id);
@@ -63,6 +67,7 @@ namespace DotNetTrainingProject.Controllers
         }
 
         [HttpPost("add-product-with-new-group")]
+        [Authorize]
         public async Task<IActionResult> AddProductWithNewGroup([FromBody] TestTransactionRequest request)
         {
             var response = await _service.AddProductWithNewGroup(request.Product, request.ProductGroup);

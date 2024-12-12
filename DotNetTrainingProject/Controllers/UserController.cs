@@ -1,7 +1,6 @@
-﻿using DotNetTrainingProject.Entities;
-using DotNetTrainingProject.Models.Requests;
+﻿using DotNetTrainingProject.Models.Requests;
 using DotNetTrainingProject.Models.Responses;
-using Microsoft.AspNetCore.Identity;
+using DotNetTrainingProject.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetTrainingProject.Controllers
@@ -10,46 +9,33 @@ namespace DotNetTrainingProject.Controllers
     [Route("api/users")]
     public class UserController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private const string DEFAULT_ROLE = "Customer";
+        private IUserService _userService;
 
-        public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UserController(IUserService userService)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
+            _userService = userService;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RequestForRegister request)
         {
-            var existUser = await _userManager.FindByEmailAsync(request.Email);
-            if (existUser != null)
+            var result = await _userService.Register(request);
+            if (!result)
             {
-                return StatusCode(StatusCodes.Status400BadRequest,
-                    new Response { Status = "Error", Message = "User already exist!" });
+                return StatusCode(StatusCodes.Status401Unauthorized, new Response { Status = "Error", Message = "Create user failed!" });
             }
-
-            ApplicationUser user = new ApplicationUser()
-            {
-                UserName = request.UserName,
-                Email = request.Email,
-                FullName = request.FullName,
-                DateOfBirth = request.DateOfBirth,
-                Address = request.Address,
-                ProfilePictureUrl = request.ProfilePictureUrl,
-                Description = request.Description,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
-            };
-
-            var result = await _userManager.CreateAsync(user, request.Password);
-            if (!result.Succeeded)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Create user failed!" });
-            }
-            await _userManager.AddToRoleAsync(user, DEFAULT_ROLE);
             return StatusCode(StatusCodes.Status201Created, new Response { Status = "Success", Message = "Create user successfully!" });
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] RequestForLogin request)
+        {
+            var result = await _userService.Login(request);
+            if (String.IsNullOrEmpty(result))
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, new Response { Status = "Error", Message = "Login failed!" });
+            }
+            return Ok(result);
         }
     }
 }

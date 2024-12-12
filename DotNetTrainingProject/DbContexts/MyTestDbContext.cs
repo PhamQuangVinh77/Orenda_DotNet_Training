@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace DotNetTrainingProject.DbContexts
 {
@@ -10,7 +9,7 @@ namespace DotNetTrainingProject.DbContexts
     {
         private const string DEFAULT_ADMIN_PASSWORD = "Admin123@";
         private IPasswordHasher<ApplicationUser> _passwordHasher;
-        public MyTestDbContext(DbContextOptions<MyTestDbContext> options, IPasswordHasher<ApplicationUser> passwordHasher) : base(options) 
+        public MyTestDbContext(DbContextOptions<MyTestDbContext> options, IPasswordHasher<ApplicationUser> passwordHasher) : base(options)
         {
             _passwordHasher = passwordHasher;
         }
@@ -62,7 +61,9 @@ namespace DotNetTrainingProject.DbContexts
             {
                 Id = Guid.NewGuid().ToString(),
                 UserName = "admin",
+                NormalizedUserName = "admin".ToUpper(),
                 Email = "admin@gmail.com",
+                NormalizedEmail = "admin@gmail.com".ToUpper(),
                 FullName = "Boss Admin",
                 DateOfBirth = DateTime.Now,
                 Address = "Hanoi",
@@ -79,7 +80,7 @@ namespace DotNetTrainingProject.DbContexts
                     new IdentityRole() { Name = "Customer", ConcurrencyStamp = "2", NormalizedName = "Customer" }
             );
             modelBuilder.Entity<ApplicationUser>().HasData(admin);
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>() { RoleId = adminRole.Id, UserId = admin.Id});
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>() { RoleId = adminRole.Id, UserId = admin.Id });
         }
     }
 }
