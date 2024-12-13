@@ -1,5 +1,6 @@
 ﻿using DotNetTrainingProject.DbContexts;
 using DotNetTrainingProject.Entities;
+using DotNetTrainingProject.MailUtilities;
 using DotNetTrainingProject.Services;
 using DotNetTrainingProject.Services.IServices;
 using DotNetTrainingProject.UnitOfWorks;
@@ -39,6 +40,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Add for use Mailkit to send mail
+builder.Services.AddOptions();
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings")); // Set để MailSetting nhận data từ appsetting.json
+
 // Add SQL connection string
 builder.Services.AddDbContext<MyTestDbContext>(option => option.UseMySQL(builder.Configuration.GetConnectionString("TestDb")));
 builder.Services.AddAutoMapper(typeof(Program));
@@ -46,6 +51,7 @@ builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IProductGroupService, ProductGroupService>();
+builder.Services.AddTransient<ISendMailService, SendMailService>();
 
 var app = builder.Build();
 

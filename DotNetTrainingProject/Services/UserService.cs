@@ -12,16 +12,13 @@ namespace DotNetTrainingProject.Services
     public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _config;
         private readonly ILogger<UserService> _logger;
-        private const string DEFAULT_ROLE = "Customer";
-        public UserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,
-            SignInManager<ApplicationUser> signInManager, IConfiguration config, ILogger<UserService> logger)
+        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
+            IConfiguration config, ILogger<UserService> logger)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
             _signInManager = signInManager;
             _config = config;
             _logger = logger;
@@ -55,7 +52,7 @@ namespace DotNetTrainingProject.Services
                 {
                     return false;
                 }
-                await _userManager.AddToRoleAsync(user, DEFAULT_ROLE); // Add new user with role is Customer
+                await _userManager.AddToRoleAsync(user, "Customer"); // Add new user with role is Customer
                 return true;
             }
             catch (Exception ex)
@@ -71,10 +68,20 @@ namespace DotNetTrainingProject.Services
             {
                 var result = await _signInManager.PasswordSignInAsync(request.UserName, request.Password, false, false);
                 if (!result.Succeeded) return String.Empty;
+
                 var authClaims = new List<Claim>
                 {
+                    new Claim(ClaimTypes.Name, request.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
+
+                var user = await _userManager.FindByNameAsync(request.UserName);
+                var userRoles = await _userManager.GetRolesAsync(user);
+                foreach (var role in userRoles) 
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+                }
+                
                 var authenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Secret"]));
                 var token = new JwtSecurityToken(
                         issuer: _config["JWT:ValidIssuer"],

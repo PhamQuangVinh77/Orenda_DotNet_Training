@@ -1,17 +1,21 @@
 ﻿using DotNetTrainingProject.Entities;
+using DotNetTrainingProject.MailUtilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DotNetTrainingProject.DbContexts
 {
     public class MyTestDbContext : IdentityDbContext<ApplicationUser>
     {
-        private const string DEFAULT_ADMIN_PASSWORD = "Admin123@";
+        private MailSettings _mailSettings;
         private IPasswordHasher<ApplicationUser> _passwordHasher;
-        public MyTestDbContext(DbContextOptions<MyTestDbContext> options, IPasswordHasher<ApplicationUser> passwordHasher) : base(options)
+        public MyTestDbContext(DbContextOptions<MyTestDbContext> options, IPasswordHasher<ApplicationUser> passwordHasher,
+            IOptions<MailSettings> mailSettings) : base(options)
         {
             _passwordHasher = passwordHasher;
+            _mailSettings = mailSettings.Value;
         }
 
         public DbSet<Product> Products { get; set; }
@@ -61,9 +65,7 @@ namespace DotNetTrainingProject.DbContexts
             {
                 Id = Guid.NewGuid().ToString(),
                 UserName = "admin",
-                NormalizedUserName = "admin".ToUpper(),
-                Email = "admin@gmail.com",
-                NormalizedEmail = "admin@gmail.com".ToUpper(),
+                Email = _mailSettings.Mail,
                 FullName = "Boss Admin",
                 DateOfBirth = DateTime.Now,
                 Address = "Hanoi",
@@ -72,7 +74,9 @@ namespace DotNetTrainingProject.DbContexts
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
             };
-            admin.PasswordHash = _passwordHasher.HashPassword(admin, DEFAULT_ADMIN_PASSWORD);
+            admin.NormalizedUserName = admin.UserName.ToUpper();
+            admin.NormalizedEmail = admin.Email.ToUpper();
+            admin.PasswordHash = _passwordHasher.HashPassword(admin, "Admin123@");
 
             // Insert admin account to table
             modelBuilder.Entity<IdentityRole>().HasData(

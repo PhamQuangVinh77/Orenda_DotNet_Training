@@ -3,6 +3,7 @@ using System;
 using DotNetTrainingProject.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotNetTrainingProject.Migrations
 {
     [DbContext(typeof(MyTestDbContext))]
-    partial class MyTestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241213061117_ver-11")]
+    partial class ver11
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,12 +109,12 @@ namespace DotNetTrainingProject.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8825eafd-648f-4ecf-abd8-ffd346e80090",
+                            Id = "7ab8ac44-6f8f-493c-ab64-50f7024e5020",
                             AccessFailedCount = 0,
                             Address = "Hanoi",
-                            ConcurrencyStamp = "578da75a-f1ae-4c8e-a938-ef0454e45a94",
-                            CreatedAt = new DateTime(2024, 12, 13, 13, 19, 0, 489, DateTimeKind.Local).AddTicks(5765),
-                            DateOfBirth = new DateTime(2024, 12, 13, 13, 19, 0, 489, DateTimeKind.Local).AddTicks(5754),
+                            ConcurrencyStamp = "3d2db5a3-f8cb-41a4-afc8-08ea8b059a0b",
+                            CreatedAt = new DateTime(2024, 12, 13, 13, 11, 16, 132, DateTimeKind.Local).AddTicks(4184),
+                            DateOfBirth = new DateTime(2024, 12, 13, 13, 11, 16, 132, DateTimeKind.Local).AddTicks(4171),
                             Description = "It's boss's account",
                             Email = "quangvinh770808@gmail.com",
                             EmailConfirmed = false,
@@ -119,12 +122,12 @@ namespace DotNetTrainingProject.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "QUANGVINH770808@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEqkBpWhoVwZ5opWzSir5IljkpZu/ermoobNxRe/Us8mCNm8pPWPl0+Y4/tV5RnsAg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENcqT3lOq0g0AyMHtEW1YIVz4A5GrdMnUauq1TWEmsaLGKzcw3f6F2Xa+k9CgGSkCw==",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "5028a53a-096d-43f8-abd8-e46445c87bb2",
+                            SecurityStamp = "182f9c19-f4e2-48f1-afcc-d27ecb6fbea0",
                             TwoFactorEnabled = false,
-                            UpdatedAt = new DateTime(2024, 12, 13, 13, 19, 0, 489, DateTimeKind.Local).AddTicks(5766),
+                            UpdatedAt = new DateTime(2024, 12, 13, 13, 11, 16, 132, DateTimeKind.Local).AddTicks(4186),
                             UserName = "admin"
                         });
                 });
@@ -210,14 +213,14 @@ namespace DotNetTrainingProject.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1dfb635b-914d-4235-b8fc-d64fc4f8a154",
+                            Id = "58409c93-680d-4e3e-80a4-8915b014c318",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "1918e8e3-3363-4ceb-a9c5-e4bc0a7c22c9",
+                            Id = "ab1cade3-ad61-4a5e-af01-31086d2a2ea6",
                             ConcurrencyStamp = "2",
                             Name = "Customer",
                             NormalizedName = "Customer"
@@ -309,8 +312,8 @@ namespace DotNetTrainingProject.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "8825eafd-648f-4ecf-abd8-ffd346e80090",
-                            RoleId = "1dfb635b-914d-4235-b8fc-d64fc4f8a154"
+                            UserId = "7ab8ac44-6f8f-493c-ab64-50f7024e5020",
+                            RoleId = "58409c93-680d-4e3e-80a4-8915b014c318"
                         });
                 });
 

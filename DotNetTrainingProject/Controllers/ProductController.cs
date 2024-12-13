@@ -1,5 +1,6 @@
 ﻿using DotNetTrainingProject.Entities;
 using DotNetTrainingProject.Models.Requests;
+using DotNetTrainingProject.Models.Responses;
 using DotNetTrainingProject.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ namespace DotNetTrainingProject.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<List<Product>> GetAllProducts()
         {
             var listResponse = await _service.GetAllProducts();
@@ -24,6 +26,7 @@ namespace DotNetTrainingProject.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<Product> GetProductById([FromForm] int id)
         {
             var response = await _service.GetProductById(id);
@@ -31,51 +34,51 @@ namespace DotNetTrainingProject.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddProduct([FromBody] ProductDTO p)
         {
             var response = await _service.AddProduct(p);
             if (response)
             {
-                return Ok("Add product successfully!");
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Add product successfully!" });
             }
-            return NotFound("Add product failed!");
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Add product failed!" });
         }
 
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateProduct([FromBody] ProductDTO p)
         {
             var response = await _service.UpdateProduct(p);
             if (response)
             {
-                return Ok("Update product successfully!");
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Update product successfully!" });
             }
-            return NotFound("Update product failed!");
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Update product failed!" });
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteProduct([FromForm] int id)
         {
             var response = await _service.DeleteProduct(id);
             if (response)
             {
-                return Ok("Delete product successfully!");
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Delete product successfully!" });
             }
-            return NotFound("Delete product failed!");
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Delete product failed!" });
         }
 
         [HttpPost("add-product-with-new-group")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddProductWithNewGroup([FromBody] TestTransactionRequest request)
         {
             var response = await _service.AddProductWithNewGroup(request.Product, request.ProductGroup);
             if (response)
             {
-                return Ok("Add successfully!");
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Add product successfully!" });
             }
-            return NotFound("Add failed!");
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Add product failed!" });
         }
     }
 }
