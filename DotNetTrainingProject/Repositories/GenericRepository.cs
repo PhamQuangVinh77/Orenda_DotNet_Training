@@ -15,7 +15,7 @@ namespace DotNetTrainingProject.Repositories
             _dbSet = _dbContext.Set<T>();
         }
 
-        public async Task<List<T>> GetAll()
+        public virtual async Task<List<T>> GetAll()
         {
             try
             {
@@ -27,7 +27,7 @@ namespace DotNetTrainingProject.Repositories
             }
         }
 
-        public async Task<T> GetById(int id)
+        public virtual async Task<T> GetById(int id)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace DotNetTrainingProject.Repositories
             }
         }
 
-        public async Task<bool> Add(T entity)
+        public virtual async Task<bool> Add(T entity)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace DotNetTrainingProject.Repositories
             }
         }
 
-        public bool Delete(T entity)
+        public virtual bool Delete(T entity)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace DotNetTrainingProject.Repositories
             }
         }
 
-        public bool Update(T entity)
+        public virtual bool Update(T entity)
         {
             try
             {

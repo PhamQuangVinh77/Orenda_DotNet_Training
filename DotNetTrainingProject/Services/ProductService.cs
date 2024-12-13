@@ -67,14 +67,14 @@ namespace DotNetTrainingProject.Services
             }
         }
 
-        public async Task<bool> UpdateProduct(ProductDTO p) // ERROR
+        public async Task<bool> UpdateProduct(ProductDTO p)
         {
             try
             {
                 var check = await _productRepository.GetById(p.Id);
                 if (check == null) return false;
-                var response = _mapper.Map<Product>(p);
-                _productRepository.Update(response);
+                _mapper.Map<ProductDTO, Product>(p, check);
+                _productRepository.Update(check);
                 await _unitOfWork.Save();
                 return true;
             }

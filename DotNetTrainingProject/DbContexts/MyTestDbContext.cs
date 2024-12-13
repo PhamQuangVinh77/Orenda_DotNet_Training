@@ -1,9 +1,11 @@
-﻿using DotNetTrainingProject.Entities;
+﻿using System.Data;
+using DotNetTrainingProject.Entities;
 using DotNetTrainingProject.MailUtilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using MySql.Data.MySqlClient;
 
 namespace DotNetTrainingProject.DbContexts
 {
@@ -11,11 +13,13 @@ namespace DotNetTrainingProject.DbContexts
     {
         private MailSettings _mailSettings;
         private IPasswordHasher<ApplicationUser> _passwordHasher;
+        private IConfiguration _configuration;
         public MyTestDbContext(DbContextOptions<MyTestDbContext> options, IPasswordHasher<ApplicationUser> passwordHasher,
-            IOptions<MailSettings> mailSettings) : base(options)
+            IOptions<MailSettings> mailSettings, IConfiguration configuration) : base(options)
         {
             _passwordHasher = passwordHasher;
             _mailSettings = mailSettings.Value;
+            _configuration = configuration;
         }
 
         public DbSet<Product> Products { get; set; }
@@ -56,6 +60,8 @@ namespace DotNetTrainingProject.DbContexts
         {
             base.OnConfiguring(optionsBuilder);
         }
+
+        public IDbConnection CreateConnection() => new MySqlConnection(_configuration.GetConnectionString("TestDb"));
 
         private void SeedData(ModelBuilder modelBuilder)
         {

@@ -1,5 +1,4 @@
-﻿using DotNetTrainingProject.MailUtilities;
-using DotNetTrainingProject.Models.Requests;
+﻿using DotNetTrainingProject.Models.Requests;
 using DotNetTrainingProject.Models.Responses;
 using DotNetTrainingProject.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
