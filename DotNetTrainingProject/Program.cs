@@ -19,6 +19,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Add Cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // Cho phép Angular chạy ở cổng 4200
+              .AllowAnyHeader()                     // Cho phép mọi header
+              .AllowAnyMethod();                    // Cho phép mọi HTTP method (GET, POST, PUT, DELETE, ...)
+    });
+});
+
 builder.Services.AddMemoryCache(); // Add for using cache
 
 // Add for Authorization and Authentication
@@ -63,6 +74,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("AllowSpecificOrigins"); // Use CORS
 
 app.UseHttpsRedirection();
 

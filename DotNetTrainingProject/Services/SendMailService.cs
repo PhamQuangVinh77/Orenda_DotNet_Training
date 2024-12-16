@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace DotNetTrainingProject.Services
 {
@@ -15,7 +14,7 @@ namespace DotNetTrainingProject.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMemoryCache _memoryCache;
         private IPasswordHasher<ApplicationUser> _passwordHasher;
-        public SendMailService(IOptions<MailSettings> mailSettings, UserManager<ApplicationUser> userManager, 
+        public SendMailService(IOptions<MailSettings> mailSettings, UserManager<ApplicationUser> userManager,
             IMemoryCache memoryCache, IPasswordHasher<ApplicationUser> passwordHasher)
         {
             _mailSettings = mailSettings.Value;
@@ -23,7 +22,7 @@ namespace DotNetTrainingProject.Services
             _memoryCache = memoryCache;
             _passwordHasher = passwordHasher;
         }
-        public async Task<string> SendMail(string userName) 
+        public async Task<string> SendMail(string userName)
         {
             var existUser = await _userManager.FindByNameAsync(userName);
             if (existUser == null) return "Username doesn't exist!";
@@ -55,7 +54,7 @@ namespace DotNetTrainingProject.Services
                 smtp.Disconnect(true);
                 return "Send OTP failed";
             }
-        } 
+        }
 
         private void SaveOtpInCache(string userName, string otp)
         {
