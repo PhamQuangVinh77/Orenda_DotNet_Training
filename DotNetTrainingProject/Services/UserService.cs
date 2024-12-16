@@ -98,7 +98,7 @@ namespace DotNetTrainingProject.Services
                 var token = new JwtSecurityToken(
                         issuer: _config["JWT:ValidIssuer"],
                         audience: _config["JWT:ValidAudience"],
-                        expires: DateTime.Now.AddHours(1),
+                        expires: DateTime.Now.AddMinutes(30),
                         claims: authClaims,
                         signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha256Signature)
                     );

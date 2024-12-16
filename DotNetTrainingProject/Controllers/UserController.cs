@@ -51,5 +51,16 @@ namespace DotNetTrainingProject.Controllers
             }
             return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = result });
         }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordRequest request)
+        {
+            var result = await _sendMailService.ResetPassword(request.Username, request.OTP, request.Password, request.ConfirmPassword);
+            if (String.IsNullOrEmpty(result))
+            {
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Password has been changed!" });
+            }
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = result });
+        }
     }
 }

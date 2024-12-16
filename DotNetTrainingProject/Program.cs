@@ -19,6 +19,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddMemoryCache(); // Add for using cache
+
 // Add for Authorization and Authentication
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<MyTestDbContext>().AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options =>
