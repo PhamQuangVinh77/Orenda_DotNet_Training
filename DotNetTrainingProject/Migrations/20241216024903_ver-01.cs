@@ -4,14 +4,19 @@ using MySql.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace DotNetTrainingProject.Migrations
 {
     /// <inheritdoc />
-    public partial class ver02 : Migration
+    public partial class ver01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySQL:Charset", "utf8mb4");
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -32,11 +37,11 @@ namespace DotNetTrainingProject.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(255)", nullable: false),
-                    FullName = table.Column<string>(type: "longtext", nullable: false),
+                    FullName = table.Column<string>(type: "varchar(255)", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Address = table.Column<string>(type: "longtext", nullable: false),
-                    ProfilePictureUrl = table.Column<string>(type: "longtext", nullable: false),
-                    Description = table.Column<string>(type: "longtext", nullable: false),
+                    Address = table.Column<string>(type: "varchar(255)", nullable: true),
+                    ProfilePictureUrl = table.Column<string>(type: "varchar(255)", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
@@ -57,6 +62,23 @@ namespace DotNetTrainingProject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ProductGroups",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    IsDeleted = table.Column<ulong>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductGroups", x => x.Id);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -171,6 +193,50 @@ namespace DotNetTrainingProject.Migrations
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    ProductGroupId = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    IsDeleted = table.Column<ulong>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_ProductGroups_ProductGroupId",
+                        column: x => x.ProductGroupId,
+                        principalTable: "ProductGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "88f1a374-7c30-4182-8614-79383e777eca", "2", "Customer", "Customer" },
+                    { "e53d8ba1-12ae-487c-b800-ae28bfd8b54e", "1", "Admin", "Admin" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "CreatedAt", "DateOfBirth", "Description", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePictureUrl", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UserName" },
+                values: new object[] { "75e529f9-b44a-449c-b696-027ddd1371f6", 0, "Hanoi", "0134b294-c341-459e-a6a4-8beb11c42d81", new DateTime(2024, 12, 16, 9, 49, 2, 645, DateTimeKind.Local).AddTicks(5286), new DateTime(2024, 12, 16, 9, 49, 2, 645, DateTimeKind.Local).AddTicks(5271), "It's boss's account", "quangvinh770808@gmail.com", false, "Boss Admin", false, null, "QUANGVINH770808@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEN8WUOJCIELO+dVVRflO48mjd3HcbcWcwNt+eJawy7uU2yYwLa7lxiOVmf00OodwGQ==", null, false, "", "ebfb5530-5c53-4eff-a46b-182079401c8a", false, new DateTime(2024, 12, 16, 9, 49, 2, 645, DateTimeKind.Local).AddTicks(5288), "admin" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "e53d8ba1-12ae-487c-b800-ae28bfd8b54e", "75e529f9-b44a-449c-b696-027ddd1371f6" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -207,6 +273,11 @@ namespace DotNetTrainingProject.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_ProductGroupId",
+                table: "Products",
+                column: "ProductGroupId");
         }
 
         /// <inheritdoc />
@@ -228,10 +299,16 @@ namespace DotNetTrainingProject.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "ProductGroups");
         }
     }
 }

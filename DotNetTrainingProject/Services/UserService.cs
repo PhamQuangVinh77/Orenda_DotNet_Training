@@ -13,25 +13,33 @@ namespace DotNetTrainingProject.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _config;
         private readonly ILogger<UserService> _logger;
-        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
+        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, 
             IConfiguration config, ILogger<UserService> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _config = config;
             _logger = logger;
         }
 
-        public async Task<bool> Register(RequestForRegister request)
+        public async Task<string> Register(RequestForRegister request)
         {
             try
             {
-                var existUser = await _userManager.FindByEmailAsync(request.Email);
-                if (existUser != null)
+                var checkUsername = await _userManager.FindByNameAsync(request.UserName);
+                if (checkUsername != null)
                 {
-                    return false;
+                    return "Username has already existed!";
+                } // Check exist username in database
+
+                var checkEmail = await _userManager.FindByEmailAsync(request.Email);
+                if (checkEmail != null)
+                {
+                    return "Email has already been used!";
                 } // Check exist email in database
 
                 ApplicationUser user = new ApplicationUser()
@@ -50,15 +58,19 @@ namespace DotNetTrainingProject.Services
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (!result.Succeeded)
                 {
-                    return false;
+                    return "Register failed!";
                 }
+                if(!await _roleManager.RoleExistsAsync("Customer")) 
+                {
+                    await _roleManager.CreateAsync(new IdentityRole("Customer"));
+                } 
                 await _userManager.AddToRoleAsync(user, "Customer"); // Add new user with role is Customer
-                return true;
+                return String.Empty;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return false;
+                return "Register failed!";
             }
         }
 

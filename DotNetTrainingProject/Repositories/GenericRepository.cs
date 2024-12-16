@@ -52,19 +52,6 @@ namespace DotNetTrainingProject.Repositories
             }
         }
 
-        public virtual bool Delete(T entity)
-        {
-            try
-            {
-                _dbSet.Remove(entity);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
         public virtual bool Update(T entity)
         {
             try

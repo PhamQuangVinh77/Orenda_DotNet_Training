@@ -4,6 +4,6 @@ namespace DotNetTrainingProject.Services.IServices
 {
     public interface ISendMailService
     {
-        Task<bool> SendMail(string userName);
+        Task<string> SendMail(string userName);
     }
 }

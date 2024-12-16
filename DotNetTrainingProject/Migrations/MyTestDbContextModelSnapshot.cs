@@ -106,12 +106,12 @@ namespace DotNetTrainingProject.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8825eafd-648f-4ecf-abd8-ffd346e80090",
+                            Id = "75e529f9-b44a-449c-b696-027ddd1371f6",
                             AccessFailedCount = 0,
                             Address = "Hanoi",
-                            ConcurrencyStamp = "578da75a-f1ae-4c8e-a938-ef0454e45a94",
-                            CreatedAt = new DateTime(2024, 12, 13, 13, 19, 0, 489, DateTimeKind.Local).AddTicks(5765),
-                            DateOfBirth = new DateTime(2024, 12, 13, 13, 19, 0, 489, DateTimeKind.Local).AddTicks(5754),
+                            ConcurrencyStamp = "0134b294-c341-459e-a6a4-8beb11c42d81",
+                            CreatedAt = new DateTime(2024, 12, 16, 9, 49, 2, 645, DateTimeKind.Local).AddTicks(5286),
+                            DateOfBirth = new DateTime(2024, 12, 16, 9, 49, 2, 645, DateTimeKind.Local).AddTicks(5271),
                             Description = "It's boss's account",
                             Email = "quangvinh770808@gmail.com",
                             EmailConfirmed = false,
@@ -119,12 +119,12 @@ namespace DotNetTrainingProject.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "QUANGVINH770808@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEqkBpWhoVwZ5opWzSir5IljkpZu/ermoobNxRe/Us8mCNm8pPWPl0+Y4/tV5RnsAg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEN8WUOJCIELO+dVVRflO48mjd3HcbcWcwNt+eJawy7uU2yYwLa7lxiOVmf00OodwGQ==",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "5028a53a-096d-43f8-abd8-e46445c87bb2",
+                            SecurityStamp = "ebfb5530-5c53-4eff-a46b-182079401c8a",
                             TwoFactorEnabled = false,
-                            UpdatedAt = new DateTime(2024, 12, 13, 13, 19, 0, 489, DateTimeKind.Local).AddTicks(5766),
+                            UpdatedAt = new DateTime(2024, 12, 16, 9, 49, 2, 645, DateTimeKind.Local).AddTicks(5288),
                             UserName = "admin"
                         });
                 });
@@ -137,6 +137,9 @@ namespace DotNetTrainingProject.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
+
+                    b.Property<ulong>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -169,8 +172,10 @@ namespace DotNetTrainingProject.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<ulong>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -210,14 +215,14 @@ namespace DotNetTrainingProject.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1dfb635b-914d-4235-b8fc-d64fc4f8a154",
+                            Id = "e53d8ba1-12ae-487c-b800-ae28bfd8b54e",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "1918e8e3-3363-4ceb-a9c5-e4bc0a7c22c9",
+                            Id = "88f1a374-7c30-4182-8614-79383e777eca",
                             ConcurrencyStamp = "2",
                             Name = "Customer",
                             NormalizedName = "Customer"
@@ -309,8 +314,8 @@ namespace DotNetTrainingProject.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "8825eafd-648f-4ecf-abd8-ffd346e80090",
-                            RoleId = "1dfb635b-914d-4235-b8fc-d64fc4f8a154"
+                            UserId = "75e529f9-b44a-449c-b696-027ddd1371f6",
+                            RoleId = "e53d8ba1-12ae-487c-b800-ae28bfd8b54e"
                         });
                 });
 

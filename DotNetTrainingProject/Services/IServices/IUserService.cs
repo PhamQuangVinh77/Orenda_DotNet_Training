@@ -4,7 +4,7 @@ namespace DotNetTrainingProject.Services.IServices
 {
     public interface IUserService
     {
-        Task<bool> Register(RequestForRegister request);
+        Task<string> Register(RequestForRegister request);
         Task<string> Login(RequestForLogin request);
     }
 }

@@ -16,10 +16,10 @@ namespace DotNetTrainingProject.Services
             _mailSettings = mailSettings.Value;
             _userManager = userManager;
         }
-        public async Task<bool> SendMail(string userName) 
+        public async Task<string> SendMail(string userName) 
         {
             var existUser = await _userManager.FindByNameAsync(userName);
-            if (existUser == null) return false;
+            if (existUser == null) return "Username doesn't exist!";
             var toEmail = existUser.Email.ToString();
 
             var email = new MimeMessage();
@@ -38,13 +38,13 @@ namespace DotNetTrainingProject.Services
                 await smtp.AuthenticateAsync(_mailSettings.Mail, _mailSettings.Password);
                 await smtp.SendAsync(email);
                 smtp.Disconnect(true);
-                return true;
+                return String.Empty;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 smtp.Disconnect(true);
-                return false;
+                return "Send OTP failed";
             }
         } 
     }

@@ -22,11 +22,12 @@ namespace DotNetTrainingProject.Controllers
         public async Task<IActionResult> Register([FromBody] RequestForRegister request)
         {
             var result = await _userService.Register(request);
-            if (!result)
+            if (String.IsNullOrEmpty(result))
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Create user failed!" });
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Create new account successfully!" });
             }
-            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Create user successfully!" });
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = result });
+
         }
 
         [HttpPost("login")]
@@ -35,20 +36,20 @@ namespace DotNetTrainingProject.Controllers
             var result = await _userService.Login(request);
             if (String.IsNullOrEmpty(result))
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Login failed!" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Username or password is invalid!" });
             }
-            return Ok("Access token: \n" + result);
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = result });
         }
 
         [HttpPost("forget-password")]
-        public async Task<IActionResult> ForgetPassword([FromBody] string userName)
+        public async Task<IActionResult> ForgetPassword([FromForm] string userName)
         {
             var result = await _sendMailService.SendMail(userName);
-            if (!result)
+            if (String.IsNullOrEmpty(result))
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Send email failed!" });
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "OTP has been sent to user's mail!" });
             }
-            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Send email successfully!" });
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = result });
         }
     }
 }

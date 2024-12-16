@@ -38,11 +38,11 @@ namespace DotNetTrainingProject.Controllers
         public async Task<IActionResult> AddProduct([FromBody] ProductDTO p)
         {
             var response = await _service.AddProduct(p);
-            if (response)
+            if (String.IsNullOrEmpty(response))
             {
-                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Add product successfully!" });
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Add new product successfully!" });
             }
-            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Add product failed!" });
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = response });
         }
 
         [HttpPut("{id}")]
@@ -50,11 +50,11 @@ namespace DotNetTrainingProject.Controllers
         public async Task<IActionResult> UpdateProduct([FromBody] ProductDTO p)
         {
             var response = await _service.UpdateProduct(p);
-            if (response)
+            if (String.IsNullOrEmpty(response))
             {
                 return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Update product successfully!" });
             }
-            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Update product failed!" });
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = response});
         }
 
         [HttpDelete("{id}")]
@@ -62,11 +62,11 @@ namespace DotNetTrainingProject.Controllers
         public async Task<IActionResult> DeleteProduct([FromForm] int id)
         {
             var response = await _service.DeleteProduct(id);
-            if (response)
+            if (String.IsNullOrEmpty(response))
             {
                 return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Delete product successfully!" });
             }
-            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Delete product failed!" });
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = response });
         }
 
         [HttpPost("add-product-with-new-group")]
@@ -74,11 +74,11 @@ namespace DotNetTrainingProject.Controllers
         public async Task<IActionResult> AddProductWithNewGroup([FromBody] TestTransactionRequest request)
         {
             var response = await _service.AddProductWithNewGroup(request.Product, request.ProductGroup);
-            if (response)
+            if (String.IsNullOrEmpty(response))
             {
                 return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Add product successfully!" });
             }
-            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Add product failed!" });
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = response });
         }
     }
 }

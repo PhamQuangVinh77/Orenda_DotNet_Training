@@ -1,6 +1,4 @@
-﻿using DotNetTrainingProject.DbContexts;
-using DotNetTrainingProject.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using DotNetTrainingProject.Entities;
 
 namespace DotNetTrainingProject.Repositories.IRepositories
 {
@@ -8,5 +6,6 @@ namespace DotNetTrainingProject.Repositories.IRepositories
     {
         Task<List<Product>> GetAll();
         Task<Product> GetById(int id);
+        Task<List<Product>> GetByGroup(int groupId);
     }
 }

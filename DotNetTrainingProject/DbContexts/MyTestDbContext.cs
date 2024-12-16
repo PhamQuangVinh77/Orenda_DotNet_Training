@@ -35,8 +35,9 @@ namespace DotNetTrainingProject.DbContexts
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd();
             });
-            modelBuilder.Entity<ProductGroup>(p => p.Property(q => q.Description).HasColumnType("text"));
-            modelBuilder.Entity<ProductGroup>(p => p.Property(q => q.CreatedDate).HasColumnType("datetime"));
+            modelBuilder.Entity<ProductGroup>().Property(p => p.Description).HasColumnType("text").IsRequired(false);
+            modelBuilder.Entity<ProductGroup>().Property(p => p.CreatedDate).HasColumnType("datetime");
+            modelBuilder.Entity<ProductGroup>().Property(p => p.IsDeleted).HasColumnType("bit");
 
             // Set type Product
             modelBuilder.Entity<Product>(entity =>
@@ -44,8 +45,9 @@ namespace DotNetTrainingProject.DbContexts
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd();
             });
-            modelBuilder.Entity<Product>(p => p.Property(q => q.Price).HasColumnType("decimal(18, 2)"));
-            modelBuilder.Entity<Product>(p => p.Property(q => q.CreatedDate).HasColumnType("datetime"));
+            modelBuilder.Entity<Product>().Property(p => p.Price).HasColumnType("decimal(18, 2)");
+            modelBuilder.Entity<Product>().Property(p => p.CreatedDate).HasColumnType("datetime");
+            modelBuilder.Entity<Product>().Property(p => p.IsDeleted).HasColumnType("bit");
 
             // Set type ApplicationUser
             modelBuilder.Entity<ApplicationUser>().Property(p => p.FullName).HasColumnType("varchar(255)").IsRequired(false);
@@ -66,7 +68,7 @@ namespace DotNetTrainingProject.DbContexts
         private void SeedData(ModelBuilder modelBuilder)
         {
             // Seeding admin data
-            var adminRole = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Admin", ConcurrencyStamp = "1", NormalizedName = "Admin" };
+            var adminRole = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Admin", ConcurrencyStamp = "1", NormalizedName = "ADMIN" };
             var admin = new ApplicationUser()
             {
                 Id = Guid.NewGuid().ToString(),
@@ -87,7 +89,7 @@ namespace DotNetTrainingProject.DbContexts
             // Insert admin account to table
             modelBuilder.Entity<IdentityRole>().HasData(
                     adminRole,
-                    new IdentityRole() { Name = "Customer", ConcurrencyStamp = "2", NormalizedName = "Customer" }
+                    new IdentityRole() { Name = "Customer", ConcurrencyStamp = "2", NormalizedName = "CUSTOMER" }
             );
             modelBuilder.Entity<ApplicationUser>().HasData(admin);
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>() { RoleId = adminRole.Id, UserId = admin.Id });

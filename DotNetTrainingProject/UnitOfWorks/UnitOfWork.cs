@@ -8,8 +8,8 @@ namespace DotNetTrainingProject.UnitOfWorks
     public class UnitOfWork : IUnitOfWork
     {
         public MyTestDbContext DbContext {  get; }
-        public IProductRepository ProductRepository { get; private set; }
-        public IProductGroupRepository ProductGroupRepository { get; private set; }
+        public IProductRepository ProductRepository { get; }
+        public IProductGroupRepository ProductGroupRepository { get; }
 
         public UnitOfWork(MyTestDbContext dbContext)
         {

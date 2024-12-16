@@ -14,6 +14,7 @@ namespace DotNetTrainingProject.Entities
         [ForeignKey("ProductGroup")]
         public int ProductGroupId { get; set; }
         public DateTime CreatedDate { get; set; }
+        public bool IsDeleted { get; set; }
     }
 
     public class ProductDTO
@@ -23,6 +24,5 @@ namespace DotNetTrainingProject.Entities
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public int ProductGroupId { get; set; }
-        public DateTime CreatedDate { get; set; }
     }
 }

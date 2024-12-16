@@ -6,9 +6,9 @@ namespace DotNetTrainingProject.Services.IServices
     {
         Task<List<Product>> GetAllProducts();
         Task<Product> GetProductById(int id);
-        Task<bool> AddProduct(ProductDTO p);
-        Task<bool> UpdateProduct(ProductDTO p);
-        Task<bool> DeleteProduct(int id);
-        Task<bool> AddProductWithNewGroup(ProductDTO p, ProductGroupDTO g);
+        Task<string> AddProduct(ProductDTO p);
+        Task<string> UpdateProduct(ProductDTO p);
+        Task<string> DeleteProduct(int id);
+        Task<string> AddProductWithNewGroup(ProductDTO p, ProductGroupDTO g);
     }
 }
